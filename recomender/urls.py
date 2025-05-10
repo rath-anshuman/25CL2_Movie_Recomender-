@@ -1,6 +1,9 @@
+# recomender/urls.py
+
 from django.urls import path
-from .views import home
+from . import views
 
 urlpatterns = [
-    path('', home, name='home')
+    path('', views.movie_dropdown, name='movie_dropdown'),
+    path('get_recommendations/', views.get_recommendations_htmx, name='get_recommendations_htmx'),
 ]

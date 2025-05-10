@@ -1,0 +1,8 @@
+<h3>Recommended Movies</h3>
+<ul>
+    {% for sim in recommendations %}
+        <li>{{ sim.similar_movie.title }} — Score: {{ sim.score|floatformat:2 }}</li>
+    {% empty %}
+        <li>No recommendations found.</li>
+    {% endfor %}
+</ul>

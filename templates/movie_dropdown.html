@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Recommender</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; padding: 2em; }
+        .box { max-width: 600px; margin: auto; background: white; padding: 2em; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        select { width: 100%; padding: 0.5em; margin-bottom: 1em; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Select a Movie</h2>
+        <select 
+            name="movie_id" 
+            hx-get="{% url 'get_recommendations_htmx' %}" 
+            hx-target="#recommendation-list" 
+            hx-trigger="change" 
+            hx-swap="innerHTML">
+            <option value="">-- Choose --</option>
+            {% for movie in movies %}
+                <option value="{{ movie.movie_id }}">{{ movie.title }}</option>
+            {% endfor %}
+        </select>
+
+        <div id="recommendation-list">
+            <p>Select a movie to see recommendations.</p>
+        </div>
+    </div>
+</body>
+</html>
