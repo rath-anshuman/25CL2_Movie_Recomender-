@@ -1,0 +1,8 @@
+<div class="movie-card">
+  <h2>{{ movie.title }}</h2>
+  <p><strong>Rating:</strong> {{ movie.vote_average }}</p>
+  <p><strong>Overview:</strong> {{ movie.overview }}</p>
+  {% if movie.poster_path %}
+    <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}" style="width: 200px;">
+  {% endif %}
+</div>

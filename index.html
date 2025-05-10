@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #e50914;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+
+        .movie-selector {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        select {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            border: none;
+            width: 100%;
+            max-width: 400px;
+            cursor: pointer;
+        }
+
+        .recommendations-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .initial-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #aaa;
+            font-size: 1.2rem;
+            padding: 40px 0;
+        }
+
+        .movie-card {
+            background-color: #1f1f1f;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            padding: 15px;
+        }
+
+        .movie-title {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .movie-description {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            .recommendations-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .recommendations-container {
+                grid-template-columns: 1fr;
+            }
+
+            .movie-card {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Movie Recommendations</h1>
+            <p>Select a movie to get personalized recommendations</p>
+        </header>
+
+        <div class="movie-selector">
+            <label for="movie-select">Choose a movie you like:</label>
+            <select id="movie-select">
+                <option value="">--Select a movie--</option>
+                <option value="inception">Inception</option>
+                <option value="darkKnight">The Dark Knight</option>
+                <option value="pulpFiction">Pulp Fiction</option>
+                <option value="avengers">The Avengers</option>
+                <option value="titanic">Titanic</option>
+            </select>
+        </div>
+
+        <div id="recommendations" class="recommendations-container">
+            <p class="initial-message">Select a movie to see recommendations</p>
+        </div>
+    </div>
+
+    <script>
+        // Movie database with recommendations
+        const movieDatabase = {
+            inception: {
+                title: "Inception",
+                recommendations: [
+                    {
+                        id: "interstellar",
+                        title: "Interstellar",
+                        image: "https://via.placeholder.com/300x450?text=Interstellar",
+                        description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival."
+                    },
+                    {
+                        id: "shutter-island",
+                        title: "Shutter Island",
+                        image: "https://via.placeholder.com/300x450?text=Shutter+Island",
+                        description: "A U.S. Marshal investigates the disappearance of a murderer who escaped from a hospital for the criminally insane."
+                    },
+                    {
+                        id: "matrix",
+                        title: "The Matrix",
+                        image: "https://via.placeholder.com/300x450?text=The+Matrix",
+                        description: "A computer hacker learns about the true nature of reality and his role in the war against its controllers."
+                    },
+                    {
+                        id: "tenet",
+                        title: "Tenet",
+                        image: "https://via.placeholder.com/300x450?text=Tenet",
+                        description: "Armed with only one word, Tenet, a protagonist journeys through a twilight world of international espionage."
+                    }
+                ]
+            },
+            darkKnight: {
+                title: "The Dark Knight",
+                recommendations: [
+                    {
+                        id: "batman-begins",
+                        title: "Batman Begins",
+                        image: "https://via.placeholder.com/300x450?text=Batman+Begins",
+                        description: "After training with his mentor, Batman begins his fight to free crime-ridden Gotham City from corruption."
+                    },
+                    {
+                        id: "joker",
+                        title: "Joker",
+                        image: "https://via.placeholder.com/300x450?text=Joker",
+                        description: "A mentally troubled stand-up comedian embarks on a downward spiral that leads to the creation of an iconic villain."
+                    },
+                    {
+                        id: "v-for-vendetta",
+                        title: "V for Vendetta",
+                        image: "https://via.placeholder.com/300x450?text=V+for+Vendetta",
+                        description: "In a future British tyranny, a shadowy freedom fighter, known only by the alias of 'V', plots to overthrow it."
+                    },
+                    {
+                        id: "logan",
+                        title: "Logan",
+                        image: "https://via.placeholder.com/300x450?text=Logan",
+                        description: "In a future where mutants are nearly extinct, an elderly and weary Logan leads a quiet life."
+                    }
+                ]
+            },
+            pulpFiction: {
+                title: "Pulp Fiction",
+                recommendations: [
+                    {
+                        id: "reservoir-dogs",
+                        title: "Reservoir Dogs",
+                        image: "https://via.placeholder.com/300x450?text=Reservoir+Dogs",
+                        description: "When a simple jewelry heist goes horribly wrong, the surviving criminals begin to suspect that one of them is a police informant."
+                    },
+                    {
+                        id: "goodfellas",
+                        title: "Goodfellas",
+                        image: "https://via.placeholder.com/300x450?text=Goodfellas",
+                        description: "The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen and his mob partners Jimmy Conway and Tommy DeVito."
+                    },
+                    {
+                        id: "fight-club",
+                        title: "Fight Club",
+                        image: "https://via.placeholder.com/300x450?text=Fight+Club",
+                        description: "An insomniac office worker and a devil-may-care soapmaker form an underground fight club that evolves into something much more."
+                    },
+                    {
+                        id: "django-unchained",
+                        title: "Django Unchained",
+                        image: "https://via.placeholder.com/300x450?text=Django+Unchained",
+                        description: "With the help of a German bounty hunter, a freed slave sets out to rescue his wife from a brutal Mississippi plantation owner."
+                    }
+                ]
+            },
+            avengers: {
+                title: "The Avengers",
+                recommendations: [
+                    {
+                        id: "iron-man",
+                        title: "Iron Man",
+                        image: "https://via.placeholder.com/300x450?text=Iron+Man",
+                        description: "After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil."
+                    },
+                    {
+                        id: "guardians-of-the-galaxy",
+                        title: "Guardians of the Galaxy",
+                        image: "https://via.placeholder.com/300x450?text=Guardians+of+the+Galaxy",
+                        description: "A group of intergalactic criminals must pull together to stop a fanatical warrior with plans to purge the universe."
+                    },
+                    {
+                        id: "thor-ragnarok",
+                        title: "Thor: Ragnarok",
+                        image: "https://via.placeholder.com/300x450?text=Thor+Ragnarok",
+                        description: "Imprisoned on the planet Sakaar, Thor must race against time to return to Asgard and stop Ragnarök."
+                    },
+                    {
+                        id: "black-panther",
+                        title: "Black Panther",
+                        image: "https://via.placeholder.com/300x450?text=Black+Panther",
+                        description: "T'Challa, heir to the hidden but advanced kingdom of Wakanda, must step forward to lead his people into a new future."
+                    }
+                ]
+            },
+            titanic: {
+                title: "Titanic",
+                recommendations: [
+                    {
+                        id: "the-notebook",
+                        title: "The Notebook",
+                        image: "https://via.placeholder.com/300x450?text=The+Notebook",
+                        description: "A poor yet passionate young man falls in love with a rich young woman, giving her a sense of freedom, but they are soon separated because of their social differences."
+                    },
+                    {
+                        id: "pearl-harbor",
+                        title: "Pearl Harbor",
+                        image: "https://via.placeholder.com/300x450?text=Pearl+Harbor",
+                        description: "A tale of war and romance mixed in with history. The story follows two lifelong friends and a beautiful nurse who are caught up in the horror of an infamous Sunday morning in 1941."
+                    },
+                    {
+                        id: "romeo-and-juliet",
+                        title: "Romeo + Juliet",
+                        image: "https://via.placeholder.com/300x450?text=Romeo+and+Juliet",
+                        description: "Shakespeare's famous play is updated to the hip modern suburb of Verona still retaining its original dialogue."
+                    },
+                    {
+                        id: "a-star-is-born",
+                        title: "A Star Is Born",
+                        image: "https://via.placeholder.com/300x450?text=A+Star+Is+Born",
+                        description: "A musician helps a young singer find fame as age and alcoholism send his own career into a downward spiral."
+                    }
+                ]
+            }
+        };
+
+        // Get DOM elements
+        const movieSelect = document.getElementById('movie-select');
+        const recommendationsContainer = document.getElementById('recommendations');
+
+        // Event listener for movie selection
+        movieSelect.addEventListener('change', function () {
+            const selectedMovie = this.value;
+
+            // Clear previous recommendations
+            recommendationsContainer.innerHTML = '';
+
+            if (selectedMovie === '') {
+                // If no movie is selected, show the initial message
+                recommendationsContainer.innerHTML = '<p class="initial-message">Select a movie to see recommendations</p>';
+                return;
+            }
+
+            // Get the selected movie data
+            const movieData = movieDatabase[selectedMovie];
+
+            // Add a heading for the recommendations
+            const heading = document.createElement('h2');
+            heading.textContent = `Because you like ${movieData.title}, you might also enjoy:`;
+            heading.style.gridColumn = '1 / -1';
+            heading.style.marginBottom = '20px';
+            heading.style.textAlign = 'center';
+            recommendationsContainer.appendChild(heading);
+
+            // Create movie cards for each recommendation
+            movieData.recommendations.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = 'movie-card';
+
+                movieCard.innerHTML = `
+            <img src="${movie.image}" alt="${movie.title}" class="movie-poster">
+            <div class="movie-info">
+                <h3 class="movie-title">${movie.title}</h3>
+                <p class="movie-description">${movie.description}</p>
+            </div>
+        `;
+
+                recommendationsContainer.appendChild(movieCard);
+            });
+        });
+    </script>
+</body>
+
+</html>

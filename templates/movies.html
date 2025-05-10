@@ -1,0 +1,8 @@
+<select id="movie-select" name="movie_id" hx-get="/fetch-tmdb/0/" hx-target="#movie-result" hx-swap="innerHTML">
+  <option value="">Select a movie</option>
+  {% for movie in movies %}
+    <option value="{{ movie.movie_id }}" hx-get="{% url 'fetch_tmdb_movie' movie.movie_id %}">{{ movie.title }}</option>
+  {% endfor %}
+</select>
+
+<div id="movie-result" class="mt-4"></div>
