@@ -1,170 +1,214 @@
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>{{ movie.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spectre - Movie Details</title>
     <style>
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #121212;
-            color: #f5f5f5;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0b0c10;
+            color: #cfd8dc;
+            margin: 0;
             padding: 20px;
         }
-        .movie-card {
-            background-color: #1e1e1e;
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: #1c1f24;
+            padding: 20px;
             border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+            border: 1px solid #2c3036;
         }
-        .movie-header {
-            position: relative;
-            height: 400px;
-            overflow: hidden;
-        }
-        .backdrop {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.6;
-        }
-        .movie-header-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 30px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
-            display: flex;
-            align-items: flex-end;
-            gap: 30px;
-        }
-        .poster {
-            width: 180px;
-            height: 270px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            flex-shrink: 0;
-        }
-        .movie-title-section {
-            flex-grow: 1;
-        }
-        .movie-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .movie-meta {
+
+        .movie-flex {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 10px;
+            gap: 20px;
         }
-        .rating {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background-color: rgba(255, 215, 0, 0.2);
-            padding: 5px 10px;
+
+        .poster {
+            flex: 1 1 280px;
+            text-align: center;
+        }
+
+        .poster img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .details {
+            flex: 2 1 400px;
+        }
+
+        .title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-style: italic;
+            color: #90a4ae;
+            margin-bottom: 16px;
+        }
+
+        .genres span {
+            background: #263238;
+            padding: 6px 14px;
+            margin: 4px 6px 4px 0;
+            display: inline-block;
+            font-size: 0.9rem;
+            border-radius: 16px;
+            color: #e0e0e0;
+        }
+
+        .badge {
+            background: crimson;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .info {
+            margin-top: 20px;
+        }
+
+        .info p {
+            margin: 10px 0;
+            font-size: 0.95rem;
+        }
+
+        .info strong {
+            color: #64b5f6;
+        }
+
+        .video-flag {
+            color: #00e676;
+            font-weight: bold;
+        }
+
+        .popularity-bar {
+            background: #2c3e50;
             border-radius: 20px;
+            overflow: hidden;
+            margin: 10px 0;
+            height: 12px;
         }
-        .rating-value {
-            font-weight: 700;
-            color: #FFD700;
+
+        .popularity-fill {
+            background: #00bcd4;
+            height: 100%;
+            width: {{ movie.popularity|floatformat:0 }}%;
         }
-        .star {
-            color: #FFD700;
-            font-size: 1.2rem;
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #37474f;
+            font-size: 0.9rem;
         }
-        .movie-details {
-            padding: 0 30px 30px 30px;
-        }
-        .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #ddd;
-        }
-        .overview, .genres, .language, .runtime, .release-date, .homepage, .production {
-            color: #bbb;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
+
         a {
-            color: #66cfff;
+            color: #4fc3f7;
             text-decoration: none;
         }
+
         a:hover {
             text-decoration: underline;
         }
+
         @media (max-width: 768px) {
-            .movie-header-content {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-                padding: 20px;
+            .title {
+                font-size: 1.6rem;
             }
-            .poster {
-                width: 140px;
-                height: 210px;
+            .tagline {
+                font-size: 1rem;
             }
-            .movie-title {
-                font-size: 1.8rem;
+            .info p {
+                font-size: 0.9rem;
+            }
+            .footer {
+                font-size: 0.85rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="movie-card">
-            <div class="movie-header">
-                <img src="https://image.tmdb.org/t/p/original/8lBViysvNJBPkl6zG1LVAaW3qhj.jpg" alt="Spectre Backdrop" class="backdrop">
-                <div class="movie-header-content">
-                    <img src="https://image.tmdb.org/t/p/w500/zj8ongFhtWNsVlfjOGo8pSr7PQg.jpg" alt="Spectre Poster" class="poster">
-                    <div class="movie-title-section">
-                        <h1 class="movie-title">Spectre</h1>
-                        <div class="movie-meta">
-                            <div class="rating">
-                                <span class="star">★</span>
-                                <span class="rating-value">6.6</span>
-                                <span>/10</span>
-                            </div>
-                            <span class="release-date">Release Date: 2015-10-26</span>
-                            <span class="runtime">Runtime: 148 min</span>
-                            <span class="language">Language: English</span>
-                            <span class="country">Country: GB</span>
+        <div class="movie-flex">
+            <div class="poster">
+                <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
+            </div>
+            <div class="details">
+                <div class="title">{{ movie.title }}</div>
+                <div class="tagline">{{ movie.tagline }}</div>
+
+                {% if movie.adult %}
+                    <div class="badge">🔞 Adult Content</div>
+                {% endif %}
+
+                <div class="genres">
+                    {% for genre in movie.genres %}
+                        <span>{{ genre.name }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="info">
+                    <p><strong>Overview:</strong> {{ movie.overview }}</p>
+                    <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+                    <p><strong>Runtime:</strong> {{ movie.runtime }} minutes</p>
+                    <p><strong>Language(s):</strong>
+                        {% for lang in movie.spoken_languages %}
+                            {{ lang.english_name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p><strong>Budget:</strong> ${{ movie.budget|intcomma }}</p>
+                    <p><strong>Revenue:</strong> ${{ movie.revenue|intcomma }}</p>
+                    <p><strong>Vote Average:</strong> {{ movie.vote_average }} / 10</p>
+                    <p><strong>Vote Count:</strong> {{ movie.vote_count }}</p>
+                    <p><strong>Popularity:</strong> {{ movie.popularity }}
+                        <div class="popularity-bar">
+                            <div class="popularity-fill"></div>
                         </div>
-                    </div>
+                    </p>
+                    <p><strong>Video:</strong> {% if movie.video %}<span class="video-flag">Available</span>{% else %}Not available{% endif %}</p>
+                    <p><strong>Homepage:</strong>
+                        {% if movie.homepage %}
+                            <a href="{{ movie.homepage }}" target="_blank">{{ movie.homepage }}</a>
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
                 </div>
             </div>
+        </div>
 
-            <div class="movie-details">
-                <h2 class="section-title">Overview</h2>
-                <p class="overview">
-                    A cryptic message from Bond’s past sends him on a trail to uncover a sinister organization. While M battles political forces to keep the secret service alive, Bond peels back the layers of deceit to reveal the terrible truth behind SPECTRE.
-                </p>
-
-                <h2 class="section-title">Genres</h2>
-                <p class="genres">Action, Adventure, Thriller</p>
-
-                <h2 class="section-title">Homepage</h2>
-                <p class="homepage"><a href="https://mgm.com/movies/spectre" target="_blank">https://mgm.com/movies/spectre</a></p>
-
-                <h2 class="section-title">Production Companies</h2>
-                <p class="production">Metro-Goldwyn-Mayer, Columbia Pictures, EON Productions, B24</p>
-
-                <h2 class="section-title">Spoken Languages</h2>
-                <p class="language">French, English, Spanish, Italian, German</p>
-            </div>
+        <div class="footer">
+            <p><strong>Production Companies:</strong>
+                {% for company in movie.production_companies %}
+                    {{ company.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <p><strong>Origin Country:</strong>
+                {% for country in movie.origin_country %}
+                    {{ country }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            {% if movie.imdb_id %}
+                <p><strong>IMDb:</strong> <a href="https://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">{{ movie.imdb_id }}</a></p>
+            {% endif %}
         </div>
     </div>
 </body>
