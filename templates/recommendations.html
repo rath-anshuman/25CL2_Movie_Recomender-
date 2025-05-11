@@ -1,0 +1,14 @@
+{% for rec in recm %}
+<div class="book">
+   <!-- <p>{{ rec.similar_movie.overview|slice:":500" }}...</p> -->
+
+    <!-- <br> -->
+    <div style="display: flex; justify-content: right; ">
+        <a style="font-size: 22px;" href="{% url 'movie_detail' rec.similar_movie.movie_id %}">More Details</a>
+    </div>
+
+    <div class="cover">
+        <p style="color: #121212; font-size: 15px;" >{{rec.similar_movie.title}}</p>
+    </div>
+</div>
+{% endfor %}
