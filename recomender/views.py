@@ -38,8 +38,7 @@ def fetch_tmdb_movie(request,movie_id):
     try:
         response = requests.get(url, headers=headers)
         data = response.json()
-        print(data)
-        html = render_to_string("partials/tmdb_movie_card.html", {"movie": data})
+        # print(data)
         return render(request,'movies.html',{"movie": data})
     except Exception as e:
         return HttpResponse(f"<div>Error fetching movie: {str(e)}</div>")
