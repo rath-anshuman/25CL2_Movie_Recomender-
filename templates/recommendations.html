@@ -10,8 +10,8 @@
             {{ rec.similar_movie.title }}<br>
             <small>{{ rec.similar_movie.release_date }}</small>
         </p>
-        <br>
-        <a href="{% url "movie_detail" rec.similar_movie.movie_id %}" target="_blank">Details</a>
+        br>
+        <a href="{% url "movie_detail" rec.similar_movie.movie_id %}">Details</a>
         
     </div> 
     {% endfor %}

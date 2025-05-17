@@ -48,7 +48,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie2, Review
 
 
-@login_required
+# @login_required
 def submit_review(request, movie_id):
     if request.method == "POST":
         movie = get_object_or_404(Movie2, movie_id=movie_id)
