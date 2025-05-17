@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MovieMatcher - Auth</title>
+  <style>
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #0f172a;
+      color: #e2e8f0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      padding: 2rem;
+    }
+
+    .auth-card {
+      background-color: rgba(15, 23, 42, 0.8);
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .logo h1 {
+      color: #e11d48;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #f8fafc;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 0.5rem;
+      background-color: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #94a3b8;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tabs button.active {
+      color: #e11d48;
+      border-color: #e11d48;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 5px;
+      border: 1px solid #334155;
+      background-color: #1e293b;
+      color: #f8fafc;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #e11d48;
+      box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.2);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #e11d48;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background-color: #be123c;
+    }
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+    }
+
+    .help-text {
+      font-size: 0.875rem;
+      color: #94a3b8;
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .auth-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="auth-card">
+      <div class="logo">
+        <h1>Movie<span>Matcher</span></h1>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showForm('login')">Login</button>
+        <button class="tab-btn" onclick="showForm('signup')">Signup</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="form active" action="profile.html" method="GET">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" name="email" placeholder="Enter your email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" placeholder="Enter your password" required />
+        </div>
+
+        <button type="submit" class="login-btn">Log In</button>
+      </form>
+           <p class="help-text">
+                    Forgot your password? Please contact your administrator for assistance.
+                </p>
+
+      <!-- Signup Form -->
+      <form id="signup-form" class="form">
+        <div class="form-group">
+          <label for="signup-name">Name</label>
+          <input type="text" id="signup-name" placeholder="Enter your name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" placeholder="Enter your email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" placeholder="Create a password" required />
+        </div>
+
+        <button type="submit" class="login-btn">Sign Up</button>
+      </form>
+
+      <p class="help-text">Your movie taste is safe with us.</p>
+    </div>
+  </div>
+
+  <script>
+    function showForm(formType) {
+      const loginForm = document.getElementById("login-form");
+      const signupForm = document.getElementById("signup-form");
+      const buttons = document.querySelectorAll(".tab-btn");
+
+      buttons.forEach(btn => btn.classList.remove("active"));
+      if (formType === "login") {
+        loginForm.classList.add("active");
+        signupForm.classList.remove("active");
+        buttons[0].classList.add("active");
+      } else {
+        signupForm.classList.add("active");
+        loginForm.classList.remove("active");
+        buttons[1].classList.add("active");
+      }
+    }
+  </script>
+</body>
+
+</html>
