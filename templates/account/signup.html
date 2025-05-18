@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | MovieMatcher</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>MovieMatcher</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Movies</a></li>
+                    <li><a href="#">Recommendations</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="signup.html" class="active">Sign Up</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2>Create an Account</h2>
+                    <p class="auth-subtitle">Join MovieMatcher to get personalized movie recommendations!</p>
+                    
+                    <form class="auth-form">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Create a password" required>
+                            <small>Password must be at least 8 characters long</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+                        </div>
+                        <div class="form-options">
+                            <div class="remember-me">
+                                <input type="checkbox" id="terms" required>
+                                <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn primary-btn full-width">Create Account</button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="login.html">Sign in</a></p>
+                    </div>
+                </div>
+                
+                <div class="auth-image">
+                    <img src="https://via.placeholder.com/500x600" alt="Movie collage">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 MovieMatcher. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
