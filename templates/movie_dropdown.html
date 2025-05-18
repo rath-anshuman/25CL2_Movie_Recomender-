@@ -69,11 +69,19 @@
         }
 
         .recommendations-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            flex-wrap: wrap;
             gap: 20px;
             margin-top: 30px;
         }
+
+        {% comment %} .recommendations-container > * {
+            flex: 1 1 250px; /* Allows items to grow and shrink, min width 250px */
+            max-width: calc(100% - 20px); /* To prevent overflow when gap is applied */
+        } {% endcomment %}
+
 
         .initial-message {
             grid-column: 1 / -1;
@@ -165,7 +173,7 @@
             -ms-flex-pack: center;
             justify-content: center;
             color: #ffffff;
-            width: 190px;
+            width: 200px;
             border-radius: 20px;
             padding: 5px;
             box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
