@@ -48,6 +48,8 @@ from .models import Movie2, Review
 
 
 def submit_review(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     if request.method == "POST":
         movie_id = request.POST.get("movie_id")  # corrected here
         movie = get_object_or_404(Movie2, movie_id=movie_id)
