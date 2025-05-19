@@ -1,6 +1,5 @@
 from django.db import models
 
-from django.db import models
 
 class Movie(models.Model):
     movie_id = models.IntegerField(unique=True)
@@ -58,10 +57,10 @@ class Similarity(models.Model):
     similar_movie = models.ForeignKey(Movie2, related_name='similar_movies', on_delete=models.CASCADE)
 
 from django.db import models
-from django.contrib.auth.models import User
-
+from Accounts.models import UserAccount
 class Review(models.Model):
     movie = models.ForeignKey(Movie2, on_delete=models.CASCADE)
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE,related_name='reviews')
+    rating=models.IntegerField(default=5)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

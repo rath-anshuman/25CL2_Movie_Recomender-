@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate, get_user_model,update_session_auth_hash
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 
@@ -45,7 +45,30 @@ def logout(request):
     auth_logout(request)
     return redirect("profile")
 
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        user = request.user
+
+        if not user.check_password(current_password):
+            messages.error(request, "Current password is incorrect.")
+        elif new_password != confirm_password:
+            messages.error(request, "New passwords do not match.")
+        else:
+            user.set_password(new_password)
+            user.save()
+            update_session_auth_hash(request, user)  # Keeps user logged in
+            messages.success(request, "Password updated successfully.")
+            return redirect('profile')  # or wherever your profile page is
+
+    return render(request, 'account/profile.html')  # replace with your template
+
 def profile(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, "account/profile.html")
+    
+    user = request.user
+    return render(request, "account/profile.html", {"user": user})

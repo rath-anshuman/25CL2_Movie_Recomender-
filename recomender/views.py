@@ -43,18 +43,27 @@ def fetch_tmdb_movie(request,movie_id):
     return render(request, 'movies.html', {"movie": data,'reviews': reviews})
 
 
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie2, Review
 
 
-# @login_required
-def submit_review(request, movie_id):
+def submit_review(request):
     if request.method == "POST":
+        movie_id = request.POST.get("movie_id")  # corrected here
         movie = get_object_or_404(Movie2, movie_id=movie_id)
+        review_text = request.POST.get("review")
+        rating = request.POST.get("rating")
+
         Review.objects.create(
             movie=movie,
             user=request.user,
-            text=request.POST.get("review")
+            text=review_text,
+            rating=rating
         )
-    return redirect('movie_detail', movie_id=movie_id)
+        return redirect('movie_detail', movie_id=movie_id)
+    
+    # fallback for GET or other methods
+    return redirect('movie_detail', movie_id=request.GET.get("movie_id"))
+
+
+       

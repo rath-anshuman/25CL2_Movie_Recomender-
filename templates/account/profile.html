@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -206,7 +207,7 @@
 
         .reviews-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
         }
 
@@ -222,7 +223,8 @@
         }
 
         .movie-poster {
-            height: 180px;
+            height: 150px;
+            width:120px;
             background-color: #333;
             position: relative;
             overflow: hidden;
@@ -400,11 +402,12 @@
         }
     </style>
 </head>
+
 <body>
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <a href="#" class="logo">MovieMatcher</a>
+                <a href="{% url "movie_dropdown" %}" class="logo">MovieMatcher</a>
                 <nav class="nav-links" id="navLinks">
                     <a href="{% url "movie_dropdown" %}" class="nav-link">Home</a>
                     <a href="{% url "logout" %}" class="nav-link">Logout</a>
@@ -423,97 +426,70 @@
                     <div class="profile-info">
                         <div class="info-item">
                             <span class="info-label">Name</span>
-                            <span class="info-value">John Doe</span>
+                            <span class="info-value">{{user.name}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Age</span>
-                            <span class="info-value">28</span>
+                            <span class="info-value">{{user.age}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Gender</span>
-                            <span class="info-value">Male</span>
+                            <span class="info-value">{{user.gender}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Email</span>
-                            <span class="info-value">john.doe@example.com</span>
+                            <span class="info-value">{{user.email}}</span>
                         </div>
                     </div>
+                {% if messages %}
+                {% for message in messages %} 
+                <p style="color:blue;">{{message}}</p>
+                {% endfor %}
+                {% endif %} 
                 </aside>
+                
 
                 <div class="profile-main">
                     <section class="section">
                         <h2 class="section-title">Change Password</h2>
-                        <form>
+                        <form method="POST" action="{% url 'change_password' %}">
+                            {% csrf_token %}
                             <div class="form-group">
                                 <label for="current-password">Current Password</label>
-                                <input type="password" id="current-password" class="form-control" required>
+                                <input type="password" id="current-password" name="current_password" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="new-password">New Password</label>
-                                <input type="password" id="new-password" class="form-control" required>
+                                <input type="password" id="new-password" name="new_password" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="confirm-password">Confirm New Password</label>
-                                <input type="password" id="confirm-password" class="form-control" required>
+                                <input type="password" id="confirm-password" name="confirm_password" class="form-control" required>
                             </div>
                             <button type="submit" class="btn">Update Password</button>
                         </form>
+
                     </section>
 
                     <section class="section">
                         <h2 class="section-title">My Reviews</h2>
                         <div class="reviews-container">
-                            <!-- Review 1 -->
+                            {% for review in user.reviews.all %}
                             <div class="review-card">
                                 <div class="movie-poster">
-                                    <img src="/placeholder.svg?height=180&width=300" alt="Inception">
-                                    <div class="movie-rating">9.2</div>
+                                    <a href={% url "movie_detail" review.movie.movie_id %}><img src="https://image.tmdb.org/t/p/w500{{ review.movie.poster_path }}" alt="{{ review.movie.title }}"></a>
+                                    <div class="movie-rating">{{ review.rating }}</div>
                                 </div>
                                 <div class="review-content">
-                                    <h3 class="movie-title">Inception</h3>
-                                    <div class="review-date">Reviewed on: May 15, 2023</div>
-                                    <p class="review-text">A mind-bending masterpiece that keeps you on the edge of your seat. The visual effects are stunning and the plot is incredibly complex yet satisfying.</p>
+                                    <h3 class="movie-title">{{ review.movie.title }}</h3>
+                                    <div class="review-date">Reviewed on: {{ review.created_at|date:"F d, Y" }}</div>
+                                    <p class="review-text">{{ review.text }}</p>
                                 </div>
                             </div>
+                            {% empty %}
+                            <p style="color:#999;">You haven’t posted any reviews yet.</p>
+                            {% endfor %}
 
-                            <!-- Review 2 -->
-                            <div class="review-card">
-                                <div class="movie-poster">
-                                    <img src="/placeholder.svg?height=180&width=300" alt="The Shawshank Redemption">
-                                    <div class="movie-rating">9.8</div>
-                                </div>
-                                <div class="review-content">
-                                    <h3 class="movie-title">The Shawshank Redemption</h3>
-                                    <div class="review-date">Reviewed on: April 3, 2023</div>
-                                    <p class="review-text">One of the greatest films ever made. The story of hope and redemption is timeless. Morgan Freeman's narration adds so much depth to the film.</p>
-                                </div>
-                            </div>
-
-                            <!-- Review 3 -->
-                            <div class="review-card">
-                                <div class="movie-poster">
-                                    <img src="/placeholder.svg?height=180&width=300" alt="The Dark Knight">
-                                    <div class="movie-rating">9.5</div>
-                                </div>
-                                <div class="review-content">
-                                    <h3 class="movie-title">The Dark Knight</h3>
-                                    <div class="review-date">Reviewed on: March 12, 2023</div>
-                                    <p class="review-text">Heath Ledger's Joker is simply unforgettable. This film redefined what a superhero movie could be. The action sequences are breathtaking.</p>
-                                </div>
-                            </div>
-
-                            <!-- Review 4 -->
-                            <div class="review-card">
-                                <div class="movie-poster">
-                                    <img src="/placeholder.svg?height=180&width=300" alt="Pulp Fiction">
-                                    <div class="movie-rating">9.0</div>
-                                </div>
-                                <div class="review-content">
-                                    <h3 class="movie-title">Pulp Fiction</h3>
-                                    <div class="review-date">Reviewed on: February 28, 2023</div>
-                                    <p class="review-text">Tarantino at his best. The non-linear storytelling and memorable dialogue make this a classic. The cast delivers outstanding performances.</p>
-                                </div>
-                            </div>
                         </div>
                     </section>
                 </div>
@@ -523,4 +499,5 @@
 
 
 </body>
+
 </html>
