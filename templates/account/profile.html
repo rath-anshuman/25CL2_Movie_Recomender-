@@ -471,6 +471,35 @@
                             <button type="submit" class="btn">Update Password</button>
                         </form>
                     </section>
+<section class="section">
+    <h2 class="section-title">My Reviews</h2>
+    <div class="reviews-container">
+{% for review in reviews %}
+    <div class="review-card">
+        {% if review.movie %}
+            <div class="movie-poster">
+                <a href="{% url 'movie_detail' review.movie.movie_id %}">
+                    <img src="https://image.tmdb.org/t/p/w500{{ review.movie.poster_path }}" alt="{{ review.movie.title }}">
+                </a>
+                <div class="movie-rating">{{ review.rating }}</div>
+            </div>
+            <div class="review-content">
+                <h3 class="movie-title">{{ review.movie.title }}</h3>
+        {% else %}
+            <div class="review-content">
+                <h3 class="movie-title" style="color:#999;">(Movie not found)</h3>
+        {% endif %}
+            <div class="review-date">Reviewed on: {{ review.created_at|date:"F d, Y" }}</div>
+            <p class="review-text">{{ review.text }}</p>
+        </div>
+    </div>
+{% empty %}
+    <p style="color:#999;">You haven’t posted any reviews yet.</p>
+{% endfor %}
+
+    </div>
+</section>
+
                 </div>
             </div>
         </div>

@@ -58,19 +58,17 @@ class Similarity(models.Model):
 
 # models.py (in Supabase-powered Django app)
 from django.db import models
-
+from Accounts.models import UserAccount
 class Review(models.Model):
     movie_id = models.CharField(max_length=100)  # references Movie2.movie_id (not FK)
-    user_id = models.IntegerField()              # references UserAccount.id (not FK)
+    user = models.ForeignKey(UserAccount,on_delete=models.CASCADE)              # references UserAccount.id (not FK)
     rating = models.IntegerField(default=5)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def get_user(self):
-        from Accounts.models import UserAccount
-        return UserAccount.objects.using('default').get(id=self.user_id)
 
     def get_movie(self):
         from recomender.models import Movie2
         return Movie2.objects.using('main').get(movie_id=self.movie_id)
+
 

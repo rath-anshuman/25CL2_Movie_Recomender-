@@ -70,24 +70,21 @@ def profile(request):
     if not request.user.is_authenticated:
         return redirect("login")
 
-    # Fetch reviews from supabase DB
     reviews = Review.objects.filter(user_id=request.user.id)
+    print(reviews)
 
-    # Extract all unique movie_ids from reviews
-    movie_ids = reviews.values_list('movie_id', flat=True).distinct()
+    # FIX: convert to int if stored as string
+    movie_ids = list(map(int, reviews.values_list('movie_id', flat=True).distinct()))
+    print(movie_ids)
 
-    # Fetch all movies from main DB in a single query
-    movies = Movie2.objects.using('main').filter(movie_id__in=movie_ids)
+    movies = Movie2.objects.using('main').in_bulk(movie_ids, field_name='movie_id')
+    print(movies)
 
-    # Create a lookup dict {movie_id: movie_obj}
-    movie_dict = {movie.movie_id: movie for movie in movies}
-
-    # Attach movie objects to each review
     for review in reviews:
-        review.movie_obj = movie_dict.get(review.movie_id)
+        review.movie = movies.get(int(review.movie_id))  # be safe, cast again
+        print(review.movie)
 
-    user = request.user
     return render(request, "account/profile.html", {
-        "user": user,
+        "user": request.user,
         "reviews": reviews
     })
