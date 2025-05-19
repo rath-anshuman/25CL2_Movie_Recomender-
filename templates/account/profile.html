@@ -1,135 +1,526 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Profile | MovieMatcher</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMatcher - User Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #e50914;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #e50914;
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .page-title {
+            margin-bottom: 30px;
+            font-size: 2rem;
+            color: #e50914;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .profile-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .profile-sidebar {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            height: fit-content;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #333;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #e50914;
+            overflow: hidden;
+        }
+
+        .profile-info {
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #999;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            word-break: break-word;
+        }
+
+        .profile-main {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .section {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #e50914;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #333333;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #e50914;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            background-color: #e50914;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #f40612;
+        }
+
+        .reviews-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .review-card {
+            background-color: #222;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-poster {
+            height: 180px;
+            background-color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .movie-rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e50914;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .review-content {
+            padding: 15px;
+        }
+
+        .movie-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .review-date {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .review-text {
+            color: #ddd;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Enhanced Responsive Styles */
+        @media (max-width: 1024px) {
+            .reviews-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 900px) {
+            .profile-container {
+                grid-template-columns: 1fr 1.5fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-picture {
+                width: 120px;
+                height: 120px;
+                font-size: 2.5rem;
+            }
+
+            .reviews-container {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background-color: #000000;
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                gap: 15px;
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+                z-index: 99;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+
+            .reviews-container {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 20px 15px;
+            }
+
+            .form-control {
+                padding: 10px 12px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 12px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .profile-picture {
+                width: 100px;
+                height: 100px;
+                font-size: 2rem;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+
+            .info-value {
+                font-size: 1rem;
+            }
+
+            .movie-title {
+                font-size: 1.1rem;
+            }
+
+            .review-text {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .profile-sidebar {
+                padding: 15px 10px;
+            }
+
+            .section {
+                padding: 15px 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-<header>
-    <div class="container">
-        <div class="logo">
-            <h1>MovieMatcher</h1>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">MovieMatcher</a>
+                <nav class="nav-links" id="navLinks">
+                    <a href="{% url "movie_dropdown" %}" class="nav-link">Home</a>
+                    <a href="{% url "logout" %}" class="nav-link">Logout</a>
+                </nav>
+            </div>
         </div>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Movies</a></li>
-                <li><a href="#">Recommendations</a></li>
-                <li><a href="{% url 'profile' %}" class="active">Profile</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+    </header>
 
-<main>
-    <div class="container">
-        <div class="profile-container">
-            <div class="profile-header">
-                <div class="profile-avatar">
-                    <img src="https://via.placeholder.com/150" alt="Profile Avatar">
-                </div>
-                <div class="profile-info">
-                    <h2>{{ user.name }}</h2>
-                    <p class="email">{{ user.email }} <span class="badge">Cannot be changed</span></p>
-                    <p class="member-since">Member since: {{ user.date_joined|date:"F Y" }}</p>
-                </div>
-            </div>
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">My Profile</h1>
 
-            <div class="profile-tabs">
-                <button class="tab-btn active" data-tab="account">Account Settings</button>
-                <button class="tab-btn" data-tab="reviews">My Reviews</button>
-            </div>
+            <div class="profile-container">
+                <aside class="profile-sidebar">
 
-            <div class="tab-content active" id="account">
-                <h3>Account Settings</h3>
-
-                {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                            <li class="{{ message.tags }}">{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-
-                <form class="profile-form" method="POST" action="{% url 'profile' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" value="{{ user.name }}">
+                    <div class="profile-info">
+                        <div class="info-item">
+                            <span class="info-label">Name</span>
+                            <span class="info-value">John Doe</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Age</span>
+                            <span class="info-value">28</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Gender</span>
+                            <span class="info-value">Male</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Email</span>
+                            <span class="info-value">john.doe@example.com</span>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" value="{{ user.email }}" disabled>
-                        <small>Email cannot be changed</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="current-password">Current Password</label>
-                        <input type="password" id="current-password" name="current_password">
-                    </div>
-                    <div class="form-group">
-                        <label for="new-password">New Password</label>
-                        <input type="password" id="new-password" name="new_password">
-                    </div>
-                    <div class="form-group">
-                        <label for="confirm-password">Confirm New Password</label>
-                        <input type="password" id="confirm-password" name="confirm_password">
-                    </div>
-                    <button type="submit" class="btn primary-btn">Save Changes</button>
-                </form>
-            </div>
+                </aside>
 
-            <div class="tab-content" id="reviews">
-                <h3>My Reviews</h3>
-                <div class="reviews-list">
-                    {% for review in reviews %}
-                        <div class="review-card">
-                            <div class="review-header">
-                                <img src="{{ review.movie.poster_url }}" alt="Movie Poster" class="movie-poster">
-                                <div>
-                                    <h4>{{ review.movie.title }}</h4>
-                                    <div class="rating">
-                                        {% for _ in "12345"|slice:":review.rating"|make_list %}
-                                            <span class="star filled">★</span>
-                                        {% endfor %}
-                                    </div>
-                                    <p class="review-date">Reviewed on: {{ review.created_at|date:"F d, Y" }}</p>
+                <div class="profile-main">
+                    <section class="section">
+                        <h2 class="section-title">Change Password</h2>
+                        <form>
+                            <div class="form-group">
+                                <label for="current-password">Current Password</label>
+                                <input type="password" id="current-password" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password">New Password</label>
+                                <input type="password" id="new-password" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-password">Confirm New Password</label>
+                                <input type="password" id="confirm-password" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn">Update Password</button>
+                        </form>
+                    </section>
+
+                    <section class="section">
+                        <h2 class="section-title">My Reviews</h2>
+                        <div class="reviews-container">
+                            <!-- Review 1 -->
+                            <div class="review-card">
+                                <div class="movie-poster">
+                                    <img src="/placeholder.svg?height=180&width=300" alt="Inception">
+                                    <div class="movie-rating">9.2</div>
+                                </div>
+                                <div class="review-content">
+                                    <h3 class="movie-title">Inception</h3>
+                                    <div class="review-date">Reviewed on: May 15, 2023</div>
+                                    <p class="review-text">A mind-bending masterpiece that keeps you on the edge of your seat. The visual effects are stunning and the plot is incredibly complex yet satisfying.</p>
                                 </div>
                             </div>
-                            <p class="review-text">{{ review.text }}</p>
-                            <div class="review-actions">
-                                <a href="{% url 'edit_review' review.id %}" class="btn secondary-btn">Edit</a>
-                                <a href="{% url 'delete_review' review.id %}" class="btn danger-btn">Delete</a>
+
+                            <!-- Review 2 -->
+                            <div class="review-card">
+                                <div class="movie-poster">
+                                    <img src="/placeholder.svg?height=180&width=300" alt="The Shawshank Redemption">
+                                    <div class="movie-rating">9.8</div>
+                                </div>
+                                <div class="review-content">
+                                    <h3 class="movie-title">The Shawshank Redemption</h3>
+                                    <div class="review-date">Reviewed on: April 3, 2023</div>
+                                    <p class="review-text">One of the greatest films ever made. The story of hope and redemption is timeless. Morgan Freeman's narration adds so much depth to the film.</p>
+                                </div>
+                            </div>
+
+                            <!-- Review 3 -->
+                            <div class="review-card">
+                                <div class="movie-poster">
+                                    <img src="/placeholder.svg?height=180&width=300" alt="The Dark Knight">
+                                    <div class="movie-rating">9.5</div>
+                                </div>
+                                <div class="review-content">
+                                    <h3 class="movie-title">The Dark Knight</h3>
+                                    <div class="review-date">Reviewed on: March 12, 2023</div>
+                                    <p class="review-text">Heath Ledger's Joker is simply unforgettable. This film redefined what a superhero movie could be. The action sequences are breathtaking.</p>
+                                </div>
+                            </div>
+
+                            <!-- Review 4 -->
+                            <div class="review-card">
+                                <div class="movie-poster">
+                                    <img src="/placeholder.svg?height=180&width=300" alt="Pulp Fiction">
+                                    <div class="movie-rating">9.0</div>
+                                </div>
+                                <div class="review-content">
+                                    <h3 class="movie-title">Pulp Fiction</h3>
+                                    <div class="review-date">Reviewed on: February 28, 2023</div>
+                                    <p class="review-text">Tarantino at his best. The non-linear storytelling and memorable dialogue make this a classic. The cast delivers outstanding performances.</p>
+                                </div>
                             </div>
                         </div>
-                    {% empty %}
-                        <p>No reviews yet.</p>
-                    {% endfor %}
+                    </section>
                 </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2023 MovieMatcher. All rights reserved.</p>
-    </div>
-</footer>
 
-<script>
-// Optional JS to toggle tabs
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).classList.add('active');
-    });
-});
-</script>
 </body>
 </html>

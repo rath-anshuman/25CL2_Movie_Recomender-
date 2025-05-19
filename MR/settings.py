@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'recomender.apps.RecomenderConfig',
+    'Accounts',
     'django.contrib.humanize',
         
 ]
@@ -54,6 +55,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'MR.urls'
+
 import os
 TEMPLATES = [
     {
@@ -72,6 +74,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MR.wsgi.application'
 
+
+AUTH_USER_MODEL="Accounts.UserAccount"
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
