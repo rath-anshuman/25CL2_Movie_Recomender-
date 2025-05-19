@@ -3,7 +3,7 @@ from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth import authenticate, get_user_model,update_session_auth_hash
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
-
+from recomender.models import Review,Movie2
 User = get_user_model()
 
 @csrf_protect
@@ -69,6 +69,25 @@ def change_password(request):
 def profile(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    
+
+    # Fetch reviews from supabase DB
+    reviews = Review.objects.filter(user_id=request.user.id)
+
+    # Extract all unique movie_ids from reviews
+    movie_ids = reviews.values_list('movie_id', flat=True).distinct()
+
+    # Fetch all movies from main DB in a single query
+    movies = Movie2.objects.using('main').filter(movie_id__in=movie_ids)
+
+    # Create a lookup dict {movie_id: movie_obj}
+    movie_dict = {movie.movie_id: movie for movie in movies}
+
+    # Attach movie objects to each review
+    for review in reviews:
+        review.movie_obj = movie_dict.get(review.movie_id)
+
     user = request.user
-    return render(request, "account/profile.html", {"user": user})
+    return render(request, "account/profile.html", {
+        "user": user,
+        "reviews": reviews
+    })

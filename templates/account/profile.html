@@ -224,7 +224,7 @@
 
         .movie-poster {
             height: 150px;
-            width:120px;
+            width: 120px;
             background-color: #333;
             position: relative;
             overflow: hidden;
@@ -441,13 +441,13 @@
                             <span class="info-value">{{user.email}}</span>
                         </div>
                     </div>
-                {% if messages %}
-                {% for message in messages %} 
-                <p style="color:blue;">{{message}}</p>
-                {% endfor %}
-                {% endif %} 
+                    {% if messages %}
+                    {% for message in messages %}
+                    <p style="color:blue;">{{message}}</p>
+                    {% endfor %}
+                    {% endif %}
                 </aside>
-                
+
 
                 <div class="profile-main">
                     <section class="section">
@@ -456,41 +456,14 @@
                             {% csrf_token %}
                             <div class="form-group">
                                 <label for="current-password">Current Password</label>
-                                <input type="password" id="current-password" name="current_password" class="form-control" required>
+                                <input type="password" id="current-password" name="current_password"
+                                    class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="new-password">New Password</label>
-                                <input type="password" id="new-password" name="new_password" class="form-control" required>
+                                <input type="password" id="new-password" name="new_password" class="form-control"
+                                    required>
                             </div>
-                            <div class="form-group">
-                                <label for="confirm-password">Confirm New Password</label>
-                                <input type="password" id="confirm-password" name="confirm_password" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn">Update Password</button>
-                        </form>
-
-                    </section>
-
-                    <section class="section">
-                        <h2 class="section-title">My Reviews</h2>
-                        <div class="reviews-container">
-                            {% for review in user.reviews.all %}
-                            <div class="review-card">
-                                <div class="movie-poster">
-                                    <a href={% url "movie_detail" review.movie.movie_id %}><img src="https://image.tmdb.org/t/p/w500{{ review.movie.poster_path }}" alt="{{ review.movie.title }}"></a>
-                                    <div class="movie-rating">{{ review.rating }}</div>
-                                </div>
-                                <div class="review-content">
-                                    <h3 class="movie-title">{{ review.movie.title }}</h3>
-                                    <div class="review-date">Reviewed on: {{ review.created_at|date:"F d, Y" }}</div>
-                                    <p class="review-text">{{ review.text }}</p>
-                                </div>
-                            </div>
-                            {% empty %}
-                            <p style="color:#999;">You haven’t posted any reviews yet.</p>
-                            {% endfor %}
-
-                        </div>
                     </section>
                 </div>
             </div>
